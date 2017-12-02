@@ -8,7 +8,7 @@ if ($result->num_rows > 0) {
         <?php
         while ($row = $result->fetch_assoc()) {
             ?>
-            <option value="<?php $row['a'] ?>"><?php echo $row['a'];?></option>
+            <option value="<?php echo $row['jalur_distribusi']; ?>"><?php echo $row['id'] .'. '. $row['nama'];?></option>
             
             <?php
             
