@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
                     counter += 1;
                     if ($('#urutan<?php echo $row["No"]; ?>').is(':empty')) {
                         $('#urutan<?php echo $row["No"]; ?>').append(counter);
-                        //$('#produk<?php echo $row["No"]; ?>').prop('disabled',true);
+                        arrPeringkat[counter]=<?php echo $row["No"];?>;
                         var kategori = $("#<?php echo 'kategori' . $row['No']; ?>").text();
                         var produsen = $("#<?php echo 'produsen' . $row['No']; ?>").text();
                         var merk = $("#<?php echo 'merk' . $row['No']; ?>").text();
@@ -91,7 +91,6 @@ if ($result->num_rows > 0) {
                     $('#urutan<?php echo $row["No"]; ?>').empty();
                 }
             });
-
         </script>
         <?php
     }

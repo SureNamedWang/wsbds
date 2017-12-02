@@ -14,6 +14,7 @@
             var idBarang2 = "";
             var arrPromo = [[], []];
             var arrUpline = [[], []];
+            var arrPeringkat = [];
             var isi = "";
             var i = 0;
             var j = 0;
@@ -59,227 +60,195 @@
         <!-- ISI -->
         <?php
         include_once ("class/connection.php");
-        if (isset($_POST['submit'])) {
-            $idSurvey = $_POST['nomor'];
-            $surveyor = $_POST['surveyor'];
-            $tanggal = $_POST['tanggal'];
-            $catatan = $_POST['catatan'];
-            $outlet = $_POST['outlet'];
-            $error="";
-            if ($idSurvey = "") {
-                $error+="Mohon isi nomor survey \n";
-            }
-            if ($surveyor = "") {
-                $error+="Mohon isi nama surveyor \n";
-            }
-            if ($tanggal = "") {
-                $error+="Mohon isi tanggal survey";
-            }
-            if ($outlet = "") {
-                $error+="Mohon pilih outlet yang di survey";
-            }
-            if($error=""){
-                $sql = "INSERT INTO `survey_detail` (`id`, `surveyor`, `outlet`, `tanggal`, `catatan`) "
-                    . "VALUES ('".$idSurvey."',"
-                        . " '".$surveyor."',"
-                        . " '".$outlet."',"
-                        . " '".$tanggal."',"
-                        . " '".$catatan."')";
-                
-            }
-            
-        }
         ?>
         <div class="container-fluid" style="padding-left: 5%;padding-right: 5%;">
-            <form class="form-horizontal" name="formSurvey" method="post" action="survey.php">
-                <ul class="nav nav-tabs" role="tablist" style="color: black;border-bottom-color: transparent;">
-                    <li class="nav-item" style="width: 20%;">
-                        <button style="border-right-color: black; width: 100%;" class="nav-link" href="#detail" role="tab" data-toggle="tab">Detail Survey</button>
-                    </li>
-                    <li class="nav-item" style="width: 20%;">
-                        <button style="border-right-color: black; width: 100%;" class="nav-link" href="#laris" role="tab" data-toggle="tab">Produk Terlaris</button>
-                    </li>
-                    <li class="nav-item" style="width: 20%;">
-                        <button style="border-right-color: black; width: 100%;" class="nav-link" href="#promo" role="tab" data-toggle="tab">Material Promo</button>
-                    </li>
-                    <li class="nav-item" style="width: 20%;">
-                        <button disabled style="border-right-color: black; width: 100%;" id="tabupline" class="nav-link" href="#upline" role="tab" data-toggle="tab">Upline Produk</button>
-                    </li>
-                    <li class="nav-item" style="width: 20%;">
-                        <input type="submit" class="nav-link" style="width: 100%;" name="submit" value="Simpan Survey"></button>
-                    </li>
-                </ul>
-                <br>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane fade" id="detail">
-                        <div class="form-group col-sm-12">
-                            <label>Nomor Kuisioner*</label>
-                            <input type="text" class="form-control" name="nomor" placeholder="Masukkan Nomor Kuisioner">
-                        </div>
-                        <div class="form-group col-sm-12">
-                            <label>Surveyor*</label>
-                            <input type="text" class="form-control" name="surveyor" placeholder="Masukkan Surveyor">
-                        </div>
-                        <div class="form-group col-sm-12">
-                            <label>Tanggal*</label>
-                            <input type="date" class="form-control" name="tanggal">
-                        </div>
-                        <div class="form-group col-sm-12">
-                            <label>Catatan</label>
-                            <input type="text" class="form-control" name="catatan" placeholder="Catatan">
-                        </div>
-                        <div class="form-group col-sm-12">
-                            <label>Outlet*</label>
+            <ul class="nav nav-tabs" role="tablist" style="color: black;border-bottom-color: transparent;">
+                <li class="nav-item" style="width: 20%;">
+                    <button style="border-right-color: black; width: 100%;" class="nav-link" href="#detail" role="tab" data-toggle="tab">Detail Survey</button>
+                </li>
+                <li class="nav-item" style="width: 20%;">
+                    <button style="border-right-color: black; width: 100%;" class="nav-link" href="#laris" role="tab" data-toggle="tab">Produk Terlaris</button>
+                </li>
+                <li class="nav-item" style="width: 20%;">
+                    <button style="border-right-color: black; width: 100%;" class="nav-link" href="#promo" role="tab" data-toggle="tab">Material Promo</button>
+                </li>
+                <li class="nav-item" style="width: 20%;">
+                    <button disabled style="border-right-color: black; width: 100%;" id="tabupline" class="nav-link" href="#upline" role="tab" data-toggle="tab">Upline Produk</button>
+                </li>
+                <li class="nav-item" style="width: 20%;">
+                    <button id="simpan" style="border-right-color: black; width: 100%;" href="#" class="nav-link">Simpan Survey</button>
+                </li>
+            </ul>
+            <br>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade" id="detail">
+                    <div class="form-group col-sm-12">
+                        <label>Nomor Kuisioner*</label>
+                        <input type="text" class="form-control" id="nomor" name="nomor" placeholder="Masukkan Nomor Kuisioner">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label>Surveyor*</label>
+                        <input type="text" class="form-control" id="surveyor" name="surveyor" placeholder="Masukkan Surveyor">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label>Tanggal*</label>
+                        <input type="date" class="form-control" id="tanggal" name="tanggal">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label>Catatan</label>
+                        <input type="text" class="form-control" id="catatan" name="catatan" placeholder="Catatan">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label>Outlet*</label>
+                        <?php
+                        $sql = "SELECT * FROM `outlet`";
+                        ?>
+                        <select id="cboOutlet" class="form-control" name="outlet">
+                            <option value="">Pilih Outlet</option>
                             <?php
-                            $sql = "SELECT * FROM `outlet`";
+                            include ("class/fillCbo.php");
                             ?>
-                            <select id="cboOutlet" class="form-control" name="outlet">
-                                <option value="">Pilih Outlet</option>
-                                <?php
-                                include ("class/fillCbo.php");
-                                ?>
-                            </select>
-                            <script>
-                                $("#cboOutlet").change(function () {
-                                    alert($("#cboOutlet").val());
-                                    var jalur = $("#cboOutlet").val();
-                                    if (jalur == 1) {
-                                        alert('jalur 1');
-                                        $('#tabupline').prop('disabled', false);
-                                    } else {
-                                        alert('jalur bukan 1');
-                                        $('#tabupline').prop('disabled', true);
-                                    }
-                                });
-                            </script>
-                        </div>
+                        </select>
+                        <script>
+                            $("#cboOutlet").change(function () {
+                                alert($("#cboOutlet").val());
+                                var jalur = $("#cboOutlet").val();
+                                if (jalur == 1) {
+                                    //alert('jalur 1');
+                                    $('#tabupline').prop('disabled', false);
+                                } else {
+                                    //alert('jalur bukan 1');
+                                    $('#tabupline').prop('disabled', true);
+                                }
+                            });
+                        </script>
+                    </div>
 
-                    </div>
-                    <div role="tabpanel" class="tab-pane fade" id="laris">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Kategori</th>
-                                            <th>Produsen</th>
-                                            <th>Merek</th>
-                                            <th>Pilih?</th>
-                                            <th>Urutan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $sql = "SELECT * FROM produk";
-                                        include ("class/fillProduk.php");
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-sm-3"></div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane fade" id="promo">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <table id="tblData" class="table table-bordered">
-                                    <thead>
-                                        <tr><center>MERK</center></tr>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="laris">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <table class="table table-bordered">
+                                <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Kategori</th>
                                         <th>Produsen</th>
                                         <th>Merek</th>
-                                        <th>Pilih Promo</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-sm-6">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr><center id='titlepromo'>PROMO</center></tr>
-                                    <tr>
-                                        <th>Material Promo</th>
                                         <th>Pilih?</th>
+                                        <th>Urutan</th>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $sql = "SELECT * FROM material_promo";
-                                        include ("class/fillPromo.php");
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT * FROM produk";
+                                    include ("class/fillProduk.php");
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
+                        <div class="col-sm-3"></div>
                     </div>
-                    <div role="tabpanel" class="tab-pane fade" id="upline">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <table id="tblMerkUpline" class="table table-bordered">
-                                    <thead>
-                                        <tr><center>MERK</center></tr>
-                                    <tr><h6 style="background-color: crimson">PILIH MERK DULU!!!!</h6></tr>
-                                    <tr>
-                                        <th>Merek</th>
-                                        <th>Pilih Merk</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="promo">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <table id="tblData" class="table table-bordered">
+                                <thead>
+                                    <tr><center>MERK</center></tr>
+                                <tr>
+                                    <th>Kategori</th>
+                                    <th>Produsen</th>
+                                    <th>Merek</th>
+                                    <th>Pilih Promo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-sm-3">
-                                <table class="table-bordered">
-                                    <thead>
-                                        <tr><h6 id="titleUpline">PILIH UPLINE</h6></tr>
-                                    </thead>
-                                    <tbody>
-                                    <select id="cboUpline" class="form-control" name="outlet">
-                                        <option value="">Pilih Outlet</option>
-                                        <?php
-                                        include ("class/fillUpline.php");
-                                        ?>
-                                    </select>
-                                    <label>Urutan Ke-</label>
-                                    <input id="urutanUpline" type="number" class="form-control" name="urutan">
-                                    <div class="col-sm-1">
-                                        <button type="button" id="btnSimpan">Simpan</button>    
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <button type="button" id="btnReset">Reset</button> 
-                                    </div>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-sm-6">
-                                <table class="table table-bordered" id="tblUpline">
-                                    <thead>
-                                        <tr><center>Upline</center></tr>
-                                    <tr>
-                                        <th></th>
-                                        <th>Merk</th>
-                                        <th>Nama Outlet</th>
-                                        <th>Provinsi</th>
-                                        <th>Kabupaten</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                                <br>
-                            </div>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr><center id='titlepromo'>PROMO</center></tr>
+                                <tr>
+                                    <th>Material Promo</th>
+                                    <th>Pilih?</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT * FROM material_promo";
+                                    include ("class/fillPromo.php");
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </form>
+                <div role="tabpanel" class="tab-pane fade" id="upline">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <table id="tblMerkUpline" class="table table-bordered">
+                                <thead>
+                                    <tr><center>MERK</center></tr>
+                                <tr><h6 style="background-color: crimson">PILIH MERK DULU!!!!</h6></tr>
+                                <tr>
+                                    <th>Merek</th>
+                                    <th>Pilih Merk</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-3">
+                            <table class="table-bordered">
+                                <thead>
+                                    <tr><h6 id="titleUpline">PILIH UPLINE</h6></tr>
+                                </thead>
+                                <tbody>
+                                <select id="cboUpline" class="form-control" name="outlet">
+                                    <option value="">Pilih Outlet</option>
+                                    <?php
+                                    include ("class/fillUpline.php");
+                                    ?>
+                                </select>
+                                <label>Urutan Ke-</label>
+                                <input id="urutanUpline" type="number" class="form-control" name="urutan">
+                                <div class="col-sm-1">
+                                    <button type="button" id="btnSimpan">Simpan</button>    
+                                </div>
+                                <div class="col-sm-1">
+                                    <button type="button" id="btnReset">Reset</button> 
+                                </div>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+                            <table class="table table-bordered" id="tblUpline">
+                                <thead>
+                                    <tr><center>Upline</center></tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Merk</th>
+                                    <th>Nama Outlet</th>
+                                    <th>Provinsi</th>
+                                    <th>Kabupaten</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <script>
             $('#btnSimpan').on('click', function () {
@@ -311,6 +280,71 @@
                 $("#tblUpline tbody").html("");
                 arrUpline[idbarang2] = [];
             });
+            $('#simpan').on('click', function () {
+                var pesanError = "";
+                if ($('#surveyor').val() == "" || $('#surveyor').val() == null) {
+                    pesanError += "Silahkan isi surveyor \n";
+                }
+                if ($('#tanggal').val() == "" || $('#tanggal').val() == null) {
+                    pesanError += "Silahkan masukkan tanggal \n";
+                }
+                if ($("#cboOutlet").val() == "" || $('#cboOutlet').val() == null) {
+                    pesanError += "Silahkan pilih outlet \n";
+                }
+                if (arrPeringkat.length != 0 || arrPeringkat.length != 1) {
+                    if ($('#nomor').val() != null || $('#nomor').val() != "") {
+                        $.each(arrPeringkat, function (index, value) {
+                            if (value != undefined) {
+                                $.post("./class/insertPeringkatLakuMerk.php", {id: $('#nomor').val(), urutan: index, merk: value})
+                                        .done(function (data) {
+                                            alert("pertama sukses"+data);
+                                        })
+                                        .fail(function () {
+                                            alert("Peringkat Tidak Tersimpan");
+                                        });
+                                $.each(arrPromo, function (index2, value2) {
+                                    if (value2 != undefined) {
+                                        if (arrPromo[index][index2] == true) {
+                                            $.post("./class/insertPromo.php", {id: $('#nomor').val(), merk: index, materialPromo: index2})
+                                                    .done(function (data) {
+                                                        alert("kedua sukses"+data);
+                                                    })
+                                                    .fail(function () {
+                                                        alert("Promo Tidak Tersimpan");
+                                                    });
+                                        }
+                                    }
+                                    else{
+                                        alert("value2 undefined");
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        pesanError += "Silahkan pilih 123";
+                    }
+                } else {
+                    alert('Tidak ada barang yang di pilih');
+                }
+                if (pesanError != "") {
+                    alert(pesanError);
+                }
+                else{
+                    $.post("./class/insertDetailSurvey.php", {
+                        id: $('#nomor').val(), 
+                        surveyor: $('#surveyor').val(), 
+                        tanggal: $('#tanggal').val(), 
+                        catatan:$('#catatan').val(), 
+                        outlet:$('#cboOutlet').val()})
+                                        .done(function (data) {
+                                            alert("ketiga sukses"+data);
+                                        })
+                                        .fail(function () {
+                                            alert("Detail Tidak Tersimpan");
+                                        });
+                }
+            });
+
         </script>
     </body>
 </html>
