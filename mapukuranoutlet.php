@@ -69,7 +69,13 @@
         <div id="olmap"  style="height: 100%;width:100%;" ></div>
     </div>
     <div style="padding: 20px; position: absolute; top: 0px; right: 0px;">
-        <button><a href="index.php">Back</a></button>    
+        <div style="background-color: whitesmoke; padding: 20px;">
+            Merah = Ukuran 10 - 20 m2<br>
+            Hijau = Ukuran < 10 m2 <br>
+            Kuning = Ukuran > 25 m2<br><br>
+            <button ><a href="index.php">Back</a></button> 
+        </div>
+           
     </div>
     
     <script type="text/javascript">

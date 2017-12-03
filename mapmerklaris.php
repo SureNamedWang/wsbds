@@ -68,121 +68,136 @@
         <div id="gmap" style="height: 100%;width:100%;" ></div>
         <div id="olmap"  style="height: 100%;width:100%;" ></div>
     </div>
-    <div style="padding: 20px; position: absolute; top: 0px; right: 0px;">
-        <button><a href="index.php">Back</a></button>    
-    </div>
-    
-    <script type="text/javascript">
-        var directionsService;
-        var directionsDisplay;
+    <?php
+    include_once('class/connection.php');
+    $sql = "select produk.Merk, outlet.propinsi, count(survey_laris.merk) FROM survey_laris inner join survey_detail on survey_laris.id_survey = survey_detail.id inner join outlet on outlet.id = survey_detail.outlet inner join provinces on outlet.propinsi = provinces.id inner join produk on produk.No=survey_laris.merk where survey_laris.urutan = 1 GROUP BY survey_laris.merk limit 1";
+    $result = mysqli_query($conn, $sql);
 
-        var colorKuning = new ol.style.Fill({
-            color: 'rgba(255, 255, 0, 0.2)'
-        });
-        var colorKuningKemerahan= new ol.style.Fill({
-            color: 'rgba(154, 205, 50, 0.2)'
-        });
-        var colorMerah = new ol.style.Fill({
-            color: 'rgba(255, 0, 0, 0.2)'
-        });
-        var garis=new ol.style.Stroke({
-            color:'#000000',
-            width:1.25
-        });
+    if (mysqli_num_rows($result) > 0) {
+        $totalRow = mysqli_num_rows($result);
+        while ($row = mysqli_fetch_assoc($result)) { ?>
+        <div style="padding: 20px; position: absolute; top: 0px; right: 0px;">
+            <div style="background-color: whitesmoke; padding: 20px;">
+                Merk yang terlaris : <?php echo $row["Merk"]?><br><br>
+                <button ><a href="index.php">Back</a></button> 
+            </div>  
+        </div>
+        <?php
+    }
+}
+?>
 
-        var tipe1 = new ol.style.Style({
-            fill : colorKuning,
-            stroke : garis
-        });
 
-        var tipe2 = new ol.style.Style({
-            fill : colorKuningKemerahan,
-            stroke : garis
-        });
+<script type="text/javascript">
+    var directionsService;
+    var directionsDisplay;
 
-        var tipe3 = new ol.style.Style({
-            fill : colorMerah,
-            stroke : garis
-        });
+    var colorKuning = new ol.style.Fill({
+        color: 'rgba(255, 255, 0, 0.2)'
+    });
+    var colorKuningKemerahan= new ol.style.Fill({
+        color: 'rgba(154, 205, 50, 0.2)'
+    });
+    var colorMerah = new ol.style.Fill({
+        color: 'rgba(255, 0, 0, 0.2)'
+    });
+    var garis=new ol.style.Stroke({
+        color:'#000000',
+        width:1.25
+    });
 
-        var idprop = "";
+    var tipe1 = new ol.style.Style({
+        fill : colorKuning,
+        stroke : garis
+    });
 
-        <?php 
-        include_once('class/connection.php');
-        $sql = "SELECT outlet.propinsi, count(merk) FROM survey_laris inner join survey_detail on survey_laris.id_survey = survey_detail.id inner join outlet on outlet.id = survey_detail.outlet inner join provinces on outlet.propinsi = provinces.id where survey_laris.urutan = 1 GROUP BY survey_laris.merk limit 1";
-        $result = mysqli_query($conn, $sql);
+    var tipe2 = new ol.style.Style({
+        fill : colorKuningKemerahan,
+        stroke : garis
+    });
 
-        if (mysqli_num_rows($result) > 0) {
-            $totalRow = mysqli_num_rows($result);
-            while ($row = mysqli_fetch_assoc($result)) { ?>
-                idprop=<?php echo $row['propinsi'] ?>;
-                <?php
-            }
+    var tipe3 = new ol.style.Style({
+        fill : colorMerah,
+        stroke : garis
+    });
+
+    var idprop = "";
+
+    <?php 
+    $sql = "SELECT outlet.propinsi, count(merk) FROM survey_laris inner join survey_detail on survey_laris.id_survey = survey_detail.id inner join outlet on outlet.id = survey_detail.outlet inner join provinces on outlet.propinsi = provinces.id where survey_laris.urutan = 1 GROUP BY survey_laris.merk limit 1";
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        $totalRow = mysqli_num_rows($result);
+        while ($row = mysqli_fetch_assoc($result)) { ?>
+            idprop=<?php echo $row['propinsi'] ?>;
+            <?php
         }
-        ?>
+    }
+    ?>
 
-        function render_tipe(feature,resolution){
-            console.log(feature.get('KODE_PROP'));
-            if(idprop == feature.get('KODE_PROP')){
-                return tipe3;
-            } else {
-                return null;
-            }
+    function render_tipe(feature,resolution){
+        console.log(feature.get('KODE_PROP'));
+        if(idprop == feature.get('KODE_PROP')){
+            return tipe3;
+        } else {
+            return null;
         }
+    }
 
-        var prop = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                format: new ol.format.GeoJSON({
-                    defaultDataProjection: 'EPSG:4326'
-                }),
-                url: 'indonesia_prop.geojson'
+    var prop = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            format: new ol.format.GeoJSON({
+                defaultDataProjection: 'EPSG:4326'
             }),
-            style : render_tipe,
-        });
+            url: 'indonesia_prop.geojson'
+        }),
+        style : render_tipe,
+    });
 
-        var gmap = new google.maps.Map(document.getElementById('gmap'), {
-            center: {lat: -7.2547, lng: 112.752},
-            zoom: 14,
-            disableDefaultUI: true,
-            keyboardShortcuts: false,
-            draggable: false,
-            disableDoubleClickZoom: true,
-            scroolwheel: false,
-            streetViewControl: true
-        });
-        directionsService = new google.maps.DirectionsService;
-        directionsDisplay = new google.maps.DirectionsRenderer;
-        directionsDisplay.setMap(gmap);
+    var gmap = new google.maps.Map(document.getElementById('gmap'), {
+        center: {lat: -7.2547, lng: 112.752},
+        zoom: 14,
+        disableDefaultUI: true,
+        keyboardShortcuts: false,
+        draggable: false,
+        disableDoubleClickZoom: true,
+        scroolwheel: false,
+        streetViewControl: true
+    });
+    directionsService = new google.maps.DirectionsService;
+    directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsDisplay.setMap(gmap);
 
-        var view = new ol.View({
+    var view = new ol.View({
                 // make sure the view doesn't go beyond the 22 zoom levels of Google Maps
                 maxZoom: 12
             });
-        view.on('change:center', function () {
-            var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
-            gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
-        });
-        view.on('change:resolution', function () {
-            gmap.setZoom(view.getZoom());
-        });
+    view.on('change:center', function () {
+        var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
+        gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
+    });
+    view.on('change:resolution', function () {
+        gmap.setZoom(view.getZoom());
+    });
 
-        var olMapDiv = document.getElementById('olmap');
+    var olMapDiv = document.getElementById('olmap');
 
-        var map = new ol.Map({
-            target: olMapDiv,
-            layers: [
-            prop,
-            ],
-            view: view
-        });
+    var map = new ol.Map({
+        target: olMapDiv,
+        layers: [
+        prop,
+        ],
+        view: view
+    });
 
-        view.setCenter(ol.proj.fromLonLat([117.6899509, -1.9048122]));
-        view.setZoom(5);
+    view.setCenter(ol.proj.fromLonLat([117.6899509, -1.9048122]));
+    view.setZoom(5);
 
-        olMapDiv.parentNode.removeChild(olMapDiv);
-        gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);
+    olMapDiv.parentNode.removeChild(olMapDiv);
+    gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);
 
-    </script>
+</script>
 </br>
 </body>
 </html>
