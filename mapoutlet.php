@@ -111,7 +111,7 @@
 
         var view = new ol.View({
                 // make sure the view doesn't go beyond the 22 zoom levels of Google Maps
-                maxZoom: 5
+                maxZoom: 12
             });
         view.on('change:center', function () {
             var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
@@ -126,7 +126,7 @@
         <?php
 
         include_once('class/connection.php');
-        $sql = "select * from koordinat";
+        $sql = "select * from koordinat inner join outlet on koordinat.id = outlet.id";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
@@ -142,6 +142,10 @@
                     dataProjection: 'EPSG:4326',
                     featureProjection: 'EPSG:3857'
                 });
+
+                feature<?php echo $row["key"];?>.set("nama_outlet",'<?php echo $row["nama"];?>');
+                feature<?php echo $row["key"];?>.set("foto_outlet",'<?php echo $row["foto"];?>');
+                feature<?php echo $row["key"];?>.set("alamat_outlet",'<?php echo $row["alamat"];?>');
 
                 var vector<?php echo $row["key"];?> = new ol.layer.Vector({
                     source: new ol.source.Vector({
@@ -168,43 +172,29 @@
 
         map.on('singleclick', function(evt) {
             var coordinate = evt.coordinate;
-            // var templateChart = "<div id='overlay' style='width:100px; background-color=black;'>"+
-            //                     "<canvas id='canvas'></canvas>"+
-            //                     "</div>"+
-            // eval("$.getScript('Chart.bundle.js');"+
-            //     "$.getScript('utils.js');"+
-            // "var config = {"+
-            //     "type: 'pie',"+
-            //     "data: {"+
-            //         "datasets: [{"+
-            //             "data: ["+
-            //             "10,20,30,40"+
-            //             "],"+
-            //             "backgroundColor: ["+
-            //             "window.chartColors.red,"+
-            //             "window.chartColors.orange,"+
-            //             "window.chartColors.yellow,"+
-            //             "window.chartColors.green,"+
-            //             "]"+
-            //         "}] },"+
-            //         "options: {"+
-            //             "responsive: true"+
-            //         "}"+
-            //     "};"+
-            //     "console.log($('#canvas'));"+
-            //     "var ctx = document.getElementById('canvas').getContext('2d');"+
-            //     "window.myPie = new Chart(ctx, config);"
-            //     );
+            var pixel = evt.pixel;
+            var template = "";
+            var feature = map.forEachFeatureAtPixel(pixel, function (feature) {
+                return feature;
+            });
 
-            var templateTest = "<p>kamu ngeklik</p><code>"+coordinate+"</code>";
-            content.innerHTML = templateTest;
+            if(feature){
+                template = "<div><img style='width:300px; height:300px;' src='./foto/"+feature.get("foto_outlet")+"'><br><br>Nama Outlet : "+feature.get("nama_outlet")+"<br>Alamat : "+feature.get("alamat_outlet")+"</div>";
+            } else {
+                template = "Salah klik";
+            }
+
+            // var templateTest = "<p>kamu ngeklik</p><code>"+coordinate+"</code>";
+            // var test = feature.get("nama_outlet");
+
+            content.innerHTML = template;
             overlay.setPosition(coordinate);
         });
 
         map.addOverlay(overlay);
 
         view.setCenter(ol.proj.fromLonLat([117.6899509, -1.9048122]));
-        view.setZoom(12);
+        view.setZoom(5);
 
         olMapDiv.parentNode.removeChild(olMapDiv);
         gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);

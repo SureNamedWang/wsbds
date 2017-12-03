@@ -163,7 +163,7 @@
 
         var view = new ol.View({
                 // make sure the view doesn't go beyond the 22 zoom levels of Google Maps
-                maxZoom: 5
+                maxZoom: 12
             });
         view.on('change:center', function () {
             var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
@@ -184,7 +184,7 @@
         });
 
         view.setCenter(ol.proj.fromLonLat([117.6899509, -1.9048122]));
-        view.setZoom(12);
+        view.setZoom(5);
 
         olMapDiv.parentNode.removeChild(olMapDiv);
         gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);
