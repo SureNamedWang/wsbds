@@ -69,7 +69,13 @@
         <div id="olmap"  style="height: 100%;width:100%;" ></div>
     </div>
     <div style="padding: 20px; position: absolute; top: 0px; right: 0px;">
-        <button><a href="index.php">Back</a></button>    
+        <div style="background-color: whitesmoke; padding: 20px;">
+            Merah = Tipe outlet Tradisional<br>
+            Hijau = Tipe outlet Semi Modern <br>
+            Kuning = Tipe outlet Modern<br><br>
+            <button ><a href="index.php">Back</a></button> 
+        </div>
+           
     </div>
     
     <script type="text/javascript">
@@ -109,13 +115,13 @@
 
         <?php 
         include_once('class/connection.php');
-        $sql = "select o.propinsi as prop, t.No as tipe from outlet as o inner join provinces as p on o.propinsi = p.id inner join tipe_outlet as t on o.tipe = t.No";
+        $sql = "select outlet.id, outlet.nama, outlet.tipe as tipe, provinces.id as prop , count(tipe) FROM outlet inner join provinces on outlet.propinsi = provinces.id GROUP BY propinsi desc";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
             $totalRow = mysqli_num_rows($result);
             while ($row = mysqli_fetch_assoc($result)) { ?>
-                arrTipe['<?php echo $row["prop"] ?>']=<?php echo $row['tipe'] ?>;
+                arrTipe['<?php echo $row["prop"] ?>'] = <?php echo $row['tipe'] ?>;
                 <?php
             }
         }
@@ -123,7 +129,7 @@
 
         function render_tipe(feature,resolution){
             console.log(feature.get('KODE_PROP'))
-            var tipe=arrTipe[feature.get('KODE_PROP')];
+            var tipe = arrTipe[feature.get('KODE_PROP')];
             if(tipe==1) { 
                 return tipe1;
             } else if(tipe==2) { 
@@ -163,7 +169,7 @@
 
         var view = new ol.View({
                 // make sure the view doesn't go beyond the 22 zoom levels of Google Maps
-                maxZoom: 5
+                maxZoom: 12
             });
         view.on('change:center', function () {
             var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
@@ -184,7 +190,7 @@
         });
 
         view.setCenter(ol.proj.fromLonLat([117.6899509, -1.9048122]));
-        view.setZoom(12);
+        view.setZoom(5);
 
         olMapDiv.parentNode.removeChild(olMapDiv);
         gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);

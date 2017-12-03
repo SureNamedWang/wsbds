@@ -69,7 +69,13 @@
         <div id="olmap"  style="height: 100%;width:100%;" ></div>
     </div>
     <div style="padding: 20px; position: absolute; top: 0px; right: 0px;">
-        <button><a href="index.php">Back</a></button>    
+        <div style="background-color: whitesmoke; padding: 20px;">
+            Merah = Ukuran 10 - 20 m2<br>
+            Hijau = Ukuran < 10 m2 <br>
+            Kuning = Ukuran > 25 m2<br><br>
+            <button ><a href="index.php">Back</a></button> 
+        </div>
+           
     </div>
     
     <script type="text/javascript">
@@ -163,7 +169,7 @@
 
         var view = new ol.View({
                 // make sure the view doesn't go beyond the 22 zoom levels of Google Maps
-                maxZoom: 5
+                maxZoom: 12
             });
         view.on('change:center', function () {
             var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
@@ -184,7 +190,7 @@
         });
 
         view.setCenter(ol.proj.fromLonLat([117.6899509, -1.9048122]));
-        view.setZoom(12);
+        view.setZoom(5);
 
         olMapDiv.parentNode.removeChild(olMapDiv);
         gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);
