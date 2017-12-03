@@ -229,7 +229,7 @@
                         <select class="form-control" name="kabupaten" required>
                             <option value="">Pilih Kabupaten/Kota</option>
                             <?php
-                            include ("class/fillCbo.php");
+                            include ("class/fillComboBox.php");
                             ?>
                         </select>
                     </div>
@@ -241,7 +241,7 @@
                         <select class="form-control" name="provinsi">
                             <option value="">Pilih Provinsi</option>
                             <?php
-                            include ("class/fillCbo.php");
+                            include ("class/fillComboBox.php");
                             ?>
                         </select>
                     </div>
@@ -256,7 +256,7 @@
                         <select class="form-control" name="negara" required>
                             <option value="">Pilih Negara</option>
                             <?php
-                            include ("class/fillCbo.php");
+                            include ("class/fillComboBox.php");
                             ?>
                         </select>
                     </div>
@@ -268,7 +268,7 @@
                         <select class="form-control" name="jalur_distribusi" required>
                             <option value="">Pilih Jalur Distribusi</option>
                             <?php
-                            include ("class/fillCbo.php");
+                            include ("class/fillComboBox.php");
                             ?>
                         </select>
                     </div>
@@ -284,7 +284,7 @@
                         <select class="form-control" name="tipe_outlet" required>
                             <option value="">Pilih Tipe Outlet</option>
                             <?php
-                            include ("class/fillCbo.php");
+                            include ("class/fillComboBox.php");
                             ?>
                         </select>
                     </div>
@@ -296,7 +296,7 @@
                         <select class="form-control" name="ukuran_outlet" required>
                             <option value="">Pilih Ukuran Outlet</option>
                             <?php
-                            include ("class/fillCbo.php");
+                            include ("class/fillComboBox.php");
                             ?>
                         </select>
                     </div>
@@ -311,7 +311,7 @@
                         <select class="form-control" name="bangunan_outlet" required>
                             <option value="">Pilih Bangunan Outlet</option>
                             <?php
-                            include ("class/fillCbo.php");
+                            include ("class/fillComboBox.php");
                             ?>
                         </select>
                     </div>
