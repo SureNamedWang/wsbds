@@ -49,10 +49,12 @@ if ($result->num_rows > 0) {
                             }
                             idBarang2 = '<?php echo $row["No"]; ?>';
                             namaBarang2 = '<?php echo $row["Merk"] ?>';
+                            
                             $("#tblUpline tbody").html("");
-                            if (arrUpline[idBarang2].length > 1) {
-                                var counter=arrUpline[idBarang2].length;
-                                for (i = 1; i < counter; i++) {
+                            if (arrPanjangArrayUplinePerMerk[idBarang2] > 1) {
+                                var counter2=arrUpline[idBarang2].length;
+                                for (i = 1; i < counter2; i++) {
+                                    if(arrUpline[idBarang2][i]!=null||arrUpline[idBarang2][i]!=""){
                                     var arrIsi = arrUpline[idBarang2][i].split('/');
                                     var tempUpline = '<tr>' +
                                             '<td>' + arrIsi[0] + '</td>' +
@@ -62,6 +64,7 @@ if ($result->num_rows > 0) {
                                             '<td>' + arrIsi[4] + '</td>' +
                                             '</tr>';
                                     $("#tblUpline tbody").append(tempUpline);
+                                    }
                                 }
                             }
                         });

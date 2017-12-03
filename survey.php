@@ -15,11 +15,13 @@
             var arrPromo = [[], []];
             var arrUpline = [[], []];
             var arrPeringkat = [];
+            var arrPanjangArrayUplinePerMerk = [];
             var isi = "";
             var i = 0;
             var j = 0;
             for (i = 1; i <= 15; i++) {
                 arrPromo[i] = [];
+                arrUpline[i] = [];
                 for (j = 1; j <= 12; j++) {
                     arrPromo[i][j] = false;
                 }
@@ -263,6 +265,9 @@
                     alert("Silahkan masukan urutan upline yang akan di simpan");
                 }
                 if (outletUpline != "" && posisi != "") {
+                    if (namaBarang2 == "" || namaBarang2 == null) {
+                        alert("PILIH MERK DULU!!!!");
+                    }
                     var tempUpline = '<tr>' +
                             '<td>' + posisi + '</td>' +
                             '<td>' + namaBarang2 + '</td>' +
@@ -271,14 +276,19 @@
                             '<td>' + arrIsi[3] + '</td>' +
                             '</tr>';
                     $("#tblUpline tbody").append(tempUpline);
-                    arrUpline[idBarang2] = [];
+                    if (arrPanjangArrayUplinePerMerk[idBarang2] += 1) {
+
+                    } else {
+                        arrPanjangArrayUplinePerMerk[idBarang2] = 2;
+                    }
                     arrUpline[idBarang2][posisi] = posisi + "/" + namaBarang2 + "/" + arrIsi[1] + "/" + arrIsi[2] + "/" + arrIsi[3];
-                    alert(arrUpline[idBarang2].length);
+                    alert("idbarang= " + idBarang2 + " panjang array:" + arrUpline[idBarang2].length + "\n isi array:" + arrUpline[idBarang2][posisi]);
                 }
             });
             $('#btnReset').on('click', function () {
                 $("#tblUpline tbody").html("");
                 arrUpline[idbarang2] = [];
+                arrPanjangArrayUplinePerMerk[idBarang2] = 1;
             });
             $('#simpan').on('click', function () {
                 var pesanError = "";
@@ -297,51 +307,73 @@
                             if (value != undefined) {
                                 $.post("./class/insertPeringkatLakuMerk.php", {id: $('#nomor').val(), urutan: index, merk: value})
                                         .done(function (data) {
-                                            alert("pertama sukses"+data);
+                                            alert("laris sukses" + data);
                                         })
                                         .fail(function () {
                                             alert("Peringkat Tidak Tersimpan");
                                         });
                                 $.each(arrPromo, function (index2, value2) {
                                     if (value2 != undefined) {
-                                        if (arrPromo[index][index2] == true) {
-                                            $.post("./class/insertPromo.php", {id: $('#nomor').val(), merk: index, materialPromo: index2})
+                                        //index=id merk//index2=id promo
+                                        if (arrPromo[value][index2] == true) {
+                                            $.post("./class/insertPromo.php", {id: $('#nomor').val(), merk: value, materialPromo: index2})
                                                     .done(function (data) {
-                                                        alert("kedua sukses"+data);
+                                                        alert("promo sukses" + data);
                                                     })
                                                     .fail(function () {
                                                         alert("Promo Tidak Tersimpan");
                                                     });
                                         }
-                                    }
-                                    else{
+                                    } else {
                                         alert("value2 undefined");
                                     }
                                 });
                             }
                         });
+                        $.each(arrUpline, function (index3, value3) {
+                            $.each(arrUpline[index3], function (index4, value4) {
+                                if (value4 != undefined) {
+//                                        alert("uplineasu");
+                                    if (index4 != 0) {
+                                        alert("Wes masuk ke upline " + index4 + ":" + value4);
+                                        var pecahan = value4.split("/");
+                                        alert("0:" + pecahan[0] + ", 1:" + pecahan[1] + " 2:" + pecahan[2]);
+                                        $.post("./class/insertUpline.php", {id: $('#nomor').val(), merk: index3, urutan: pecahan[0], outlet: pecahan[2]})
+                                                .done(function (data) {
+                                                    alert("upline sukses" + data);
+                                                })
+                                                .fail(function () {
+                                                    alert("Upline Tidak Tersimpan");
+                                                });
+                                    }
+                                }
+//                                    else {
+//                                        alert("value3 dari " + index3 + " undefined");
+//                                    } 
+                            });
+                        });
                     } else {
-                        pesanError += "Silahkan pilih 123";
+                        pesanError += "Silahkan isi nomor Kuisioner";
                     }
                 } else {
                     alert('Tidak ada barang yang di pilih');
                 }
                 if (pesanError != "") {
                     alert(pesanError);
-                }
-                else{
+                } else {
                     $.post("./class/insertDetailSurvey.php", {
-                        id: $('#nomor').val(), 
-                        surveyor: $('#surveyor').val(), 
-                        tanggal: $('#tanggal').val(), 
-                        catatan:$('#catatan').val(), 
-                        outlet:$('#cboOutlet').val()})
-                                        .done(function (data) {
-                                            alert("ketiga sukses"+data);
-                                        })
-                                        .fail(function () {
-                                            alert("Detail Tidak Tersimpan");
-                                        });
+                        id: $('#nomor').val(),
+                        surveyor: $('#surveyor').val(),
+                        tanggal: $('#tanggal').val(),
+                        catatan: $('#catatan').val(),
+                        outlet: $('#cboOutlet').val()})
+                            .done(function (data) {
+                                alert("detail sukses" + data);
+                            })
+                            .fail(function () {
+                                alert("Detail Tidak Tersimpan");
+                            });
+                    alert("Detail ga error");
                 }
             });
 
