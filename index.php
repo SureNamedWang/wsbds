@@ -9,7 +9,53 @@
     <link rel="stylesheet" href="../openlayers4/css/ol.css" type="text/css">
     <script src="../openlayers4/build/ol.js" type="text/javascript"></script>
     <script src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false&key=AIzaSyA5yxFpPgEksKyyOecCuUF1yvb-ntD8YVo"></script>
+    <script src="Chart.bundle.js"></script>
+    <script src="utils.js"></script>
     <title>BEHAESTEX</title>
+    <style>
+    .ol-popup {
+        position: absolute;
+        background-color: white;
+        -webkit- filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #cccccc;
+        bottom: 12px;
+        left: -50px;
+        min-width: 280px;
+    }
+    .ol-popup:after, .ol-popup:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    .ol-popup:after {
+        border-top- color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+    }
+    .ol-popup:before {
+        border-top- color: #cccccc;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+    }
+    .ol-popup- closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+    }
+    .ol-popup- closer:after {
+        content: "✖";
+    }
+</style>
 </head>
 <body>
     <!-- NAVIGATION BAR -->
@@ -32,61 +78,16 @@
             </ul>
         </div>
     </nav>
-    <br>
-    
-    <div id="map" class="map">
-        <div id="gmap" style="height: 100%;width:100%;" ></div>
-        <div id="olmap"  style="height: 100%;width:100%;" ></div>
+
+    <div style="padding-top: 10px; padding-left: 1%; padding-right: 1%">
+        <h1>MAPS : </h1>
+        <button><a href="mapoutlet.php">Outlet</a></button>
+        <button><a href="maptipeoutlet.php">Tipe Outlet</a></button>
+        <button><a href="mapukuranoutlet.php">Ukuran Outlet</a></button>
+        <button><a href="mapmerklaris.php">Merk Laris Outlet</a></button>
     </div>
 
-    <script type="text/javascript">
-        var directionsService;
-        var directionsDisplay;
-
-        var gmap = new google.maps.Map(document.getElementById('gmap'), {
-            center: {lat: -7.2547, lng: 112.752},
-            zoom: 14,
-            disableDefaultUI: true,
-            keyboardShortcuts: false,
-            draggable: false,
-            disableDoubleClickZoom: true,
-            scroolwheel: false,
-            streetViewControl: true
-        });
-        directionsService = new google.maps.DirectionsService;
-        directionsDisplay = new google.maps.DirectionsRenderer;
-        directionsDisplay.setMap(gmap);
-
-        var view = new ol.View({
-                // make sure the view doesn't go beyond the 22 zoom levels of Google Maps
-                maxZoom: 5
-            });
-        view.on('change:center', function () {
-            var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
-            gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
-        });
-        view.on('change:resolution', function () {
-            gmap.setZoom(view.getZoom());
-        });
-
-
-        var olMapDiv = document.getElementById('olmap');
-
-        var map = new ol.Map({
-            target: olMapDiv,
-            layers: [
-            ],
-            view: view
-        });
-
-
-        view.setCenter(ol.proj.fromLonLat([117.6899509, -1.9048122]));
-        view.setZoom(12);
-
-        olMapDiv.parentNode.removeChild(olMapDiv);
-        gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);
-
-    </script>
+    
 </br>
 </body>
 </html>
