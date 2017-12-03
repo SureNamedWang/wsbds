@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2017 at 02:28 PM
+-- Generation Time: Dec 03, 2017 at 11:24 AM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -336,10 +336,37 @@ INSERT INTO `jalur_distribusi` (`No`, `Jalur_Distribusi`) VALUES
 --
 
 CREATE TABLE `koordinat` (
+  `key` int(11) NOT NULL,
   `id` int(11) NOT NULL,
   `x` varchar(50) NOT NULL,
   `y` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `koordinat`
+--
+
+INSERT INTO `koordinat` (`key`, `id`, `x`, `y`) VALUES
+(2, 1, '-7.322396', '112.770815'),
+(5, 2, '-7.325756', '112.779902'),
+(3, 3, '-7.317877', '112.756731'),
+(1, 4, '-8.190103', '113.728975'),
+(4, 5, '-8.176991', '113.717742'),
+(7, 6, '-8.172474', '113.702031'),
+(8, 7, '-7.812143', '110.366249'),
+(9, 8, '-6.995297', '110.421727'),
+(10, 9, '-6.201523', '106.782531'),
+(6, 10, '-6.338023', '106.187694'),
+(11, 12, '-6.917464', '107.619123'),
+(12, 13, '-6.597147', '106.806039'),
+(13, 11, '-6.402484', '106.794241'),
+(14, 14, '-7.479734', '110.217694'),
+(15, 16, '-6.889836', '109.674592'),
+(16, 15, '-7.424278', '109.239637'),
+(17, 18, '-7.732521', '110.402376'),
+(18, 17, '-6.816207', '107.622796'),
+(19, 20, '-6.886038', '109.064026'),
+(20, 19, '-6.826046', '110.843811');
 
 -- --------------------------------------------------------
 
@@ -403,7 +430,11 @@ CREATE TABLE `outlet` (
 --
 
 INSERT INTO `outlet` (`id`, `nama`, `email`, `alamat`, `foto`, `pemilik`, `pengelola`, `jalur_distribusi`, `kecamatan`, `kelurahan`, `kabupaten`, `propinsi`, `negara`, `tipe`, `ukuran`, `bangunan`, `lokasi`, `kodepos`, `telp`) VALUES
-(1, 'Sumber Mas', 'goldsource@sbrmas.com', 'Jalan Kapten Piere Tendean 61', 'monster2.jpg', 'Full Moon', 'Full Moon', 1, 'Sumber Sari', 'Karangrejo', '3509', '35', 101, 3, 1, 1, 'Lampu merah pasar belok kanan, lurus sampai jembat', 0, 331323472);
+(1, 'Sumber Mas', 'goldsource@sbrmas.com', 'Jalan Kapten Piere Tendean 61', 'monster2.jpg', 'Full Moon', 'Full Moon', 1, 'Sumber Sari', 'Karangrejo', '3509', '35', 101, 3, 1, 1, 'Lampu merah pasar belok kanan, lurus sampai jembat', 0, 331323472),
+(2, 'Tambak Mas', '', 'Jalan Banyu Urip Wetan 61', 'monster3.jpg', 'Tugimin', 'Ngatemin', 5, 'Karangasem', 'Bungursari', '3673', '31', 101, 2, 2, 2, 'Bumi', 0, 31356967),
+(3, 'Toko Mahmud', '', 'Jalan Ahmad Yani 33', 'chicago.jpg', 'Anjay', 'Anjay', 3, 'Banten', 'Serang', '3604', '32', 101, 3, 1, 1, 'Bumi', 0, 21596812),
+(4, 'Getorade', 'geto@getorede.com', 'Jalan Ambur Adul 123', 'ny.jpg', 'Ujang', 'Ujang', 1, 'Karang Mesem', 'Banyu Urip', '3273', '32', 101, 2, 1, 1, 'Bumi', 36542, 54312346),
+(5, 'Toko Deni', '', 'Jalan Trujoyo 131', 'download.jpg', 'Eric', 'Eric', 7, 'Tembakan', 'Kaseman', '3578', '35', 101, 1, 3, 3, 'Bumi', 0, 331772791);
 
 -- --------------------------------------------------------
 
@@ -1036,6 +1067,13 @@ CREATE TABLE `survey_detail` (
   `catatan` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `survey_detail`
+--
+
+INSERT INTO `survey_detail` (`id`, `surveyor`, `outlet`, `tanggal`, `catatan`) VALUES
+('45U', 'GUKGUK', 1, '2017-12-03', '');
+
 -- --------------------------------------------------------
 
 --
@@ -1047,6 +1085,16 @@ CREATE TABLE `survey_laris` (
   `merk` int(3) NOT NULL,
   `urutan` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `survey_laris`
+--
+
+INSERT INTO `survey_laris` (`id_survey`, `merk`, `urutan`) VALUES
+('45U', 5, 1),
+('45U', 6, 2),
+('45U', 12, 3),
+('45U', 13, 4);
 
 -- --------------------------------------------------------
 
@@ -1060,6 +1108,20 @@ CREATE TABLE `survey_promo` (
   `material_promo` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `survey_promo`
+--
+
+INSERT INTO `survey_promo` (`id_survey`, `merk`, `material_promo`) VALUES
+('45U', 5, 2),
+('45U', 5, 3),
+('45U', 6, 5),
+('45U', 6, 4),
+('45U', 12, 7),
+('45U', 13, 10),
+('45U', 13, 11),
+('45U', 12, 8);
+
 -- --------------------------------------------------------
 
 --
@@ -1072,6 +1134,18 @@ CREATE TABLE `survey_upline` (
   `urutan` int(11) NOT NULL,
   `outlet` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `survey_upline`
+--
+
+INSERT INTO `survey_upline` (`id_survey`, `merk`, `urutan`, `outlet`) VALUES
+('45U', 5, 1, 1),
+('45U', 6, 1, 1),
+('45U', 12, 1, 1),
+('45U', 12, 2, 1),
+('45U', 13, 1, 1),
+('45U', 13, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -1191,7 +1265,7 @@ ALTER TABLE `apps_countries`
 -- AUTO_INCREMENT for table `outlet`
 --
 ALTER TABLE `outlet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- Constraints for dumped tables
 --
